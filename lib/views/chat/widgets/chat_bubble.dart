@@ -5,6 +5,9 @@ class ChatBubble extends StatelessWidget {
   final String message;
   final String time;
   final Color color;
+  final bool isSelcted;
+  final VoidCallback onLongPress;
+  final VoidCallback onTap;
   final CrossAxisAlignment crossAxisAlignment;
   const ChatBubble({
     Key? key,
@@ -12,41 +15,64 @@ class ChatBubble extends StatelessWidget {
     required this.message,
     required this.time,
     required this.color,
+    required this.isSelcted,
     required this.crossAxisAlignment,
+    required this.onLongPress,
+    required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-      child: Column(
-        crossAxisAlignment: crossAxisAlignment,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
+      child: InkWell(
+        onTap: onTap,
+        onLongPress: onLongPress,
+        child: Stack(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  message,
-                  style: theme.textTheme.bodyText1,
-                ),
-                Text(
-                  '  $time',
-                  style: theme.textTheme.caption!.copyWith(
-                    fontSize: 12,
-                    color: Colors.green[800],
-                  ),
+                Column(
+                  crossAxisAlignment: crossAxisAlignment,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: color,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            message,
+                            style: theme.textTheme.bodyText1,
+                          ),
+                          Text(
+                            '  $time',
+                            style: theme.textTheme.caption!.copyWith(
+                              fontSize: 12,
+                              color: Colors.green[800],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ),
-        ],
+            if (isSelcted)
+              Positioned.fill(
+                child: Container(
+                  decoration:
+                      BoxDecoration(color: Colors.green.withOpacity(.1)),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

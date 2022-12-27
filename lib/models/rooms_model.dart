@@ -31,22 +31,28 @@ class RoomsModel {
 }
 
 class Messages {
+  final String id;
   final String sender;
   final String receiver;
   final String body;
+  final List viewers;
   final DateTime datetime;
 
   Messages({
+    required this.id,
     required this.sender,
     required this.receiver,
     required this.body,
+    required this.viewers,
     required this.datetime,
   });
 
   factory Messages.fromJson(Map<String, dynamic> json) => Messages(
+        id: json["id"],
         sender: json["sender"],
         receiver: json["receiver"],
         body: json["body"],
+        viewers: json["viewers"],
         datetime: DateTime.parse(json["datetime"]),
       );
 

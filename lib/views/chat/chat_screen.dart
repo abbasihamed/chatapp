@@ -14,14 +14,18 @@ class ChatScreen extends HookWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final controller = useTextEditingController();
+    ValueNotifier<Map> isSelcted = useState({});
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            userEmail,
-            style: theme.textTheme.bodyText1!.copyWith(color: Colors.white),
-          ),
-        ),
+        appBar: isSelcted.value.isNotEmpty
+            ? const CustomAppBar()
+            : AppBar(
+                title: Text(
+                  userEmail,
+                  style:
+                      theme.textTheme.bodyText1!.copyWith(color: Colors.white),
+                ),
+              ),
         body: Column(
           children: [
             Expanded(
@@ -37,16 +41,28 @@ class ChatScreen extends HookWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           theme: theme,
                           color: Colors.white,
+                          isSelcted: isSelcted.value[index] ?? false,
                           message: chat.messages[index].body,
                           time: chat.messages[index].datetime.getTime(),
+                          onLongPress: () {
+                            isSelcted.value = {index: true};
+                          },
+                          onTap: () {
+                            if (isSelcted.value.isNotEmpty) {
+                              isSelcted.value = {};
+                            }
+                          },
                         );
                       }
                       return ChatBubble(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         theme: theme,
                         color: Colors.green[500]!,
+                        isSelcted: isSelcted.value[index] ?? false,
                         message: chat.messages[index].body,
                         time: chat.messages[index].datetime.getTime(),
+                        onLongPress: () {},
+                        onTap: () {},
                       );
                     },
                   );
@@ -107,5 +123,17 @@ class ChatScreen extends HookWidget {
         ),
       ),
     );
+  }
+}
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const CustomAppBar({super.key});
+
+  @override
+  Size get preferredSize => const Size.fromHeight(60);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar();
   }
 }

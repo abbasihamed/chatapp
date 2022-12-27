@@ -31,7 +31,7 @@ class ChatViewModel extends GetxController {
     channel!.stream.listen((event) {
       var temp = jsonDecode(event);
       if (temp.runtimeType != List) {
-        _messages.add(Message.fromJson(jsonDecode(event)));
+        _messages.add(Message.fromJson(temp));
       } else {
         _rooms.value = roomsModelFromJson(event);
       }
