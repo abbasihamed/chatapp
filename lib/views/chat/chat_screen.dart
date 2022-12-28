@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
+import 'package:my_chat_app/core/enums.dart';
 import 'package:my_chat_app/helper/date_time.dart';
 import 'package:my_chat_app/view_model/chat_view_model.dart';
 
@@ -14,11 +15,20 @@ class ChatScreen extends HookWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final controller = useTextEditingController();
+    final messageId = useState('');
     ValueNotifier<Map> isSelcted = useState({});
     return SafeArea(
       child: Scaffold(
         appBar: isSelcted.value.isNotEmpty
-            ? const CustomAppBar()
+            ? CustomAppBar(
+                onPresses: () {
+                  Get.find<ChatViewModel>().socketConnection(
+                    mode: ChatEnum.delete,
+                    body: messageId.value,
+                  );
+                  isSelcted.value = {};
+                },
+              )
             : AppBar(
                 title: Text(
                   userEmail,
@@ -39,6 +49,7 @@ class ChatScreen extends HookWidget {
                       if (chat.messages[index].receiver == userEmail) {
                         return ChatBubble(
                           crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           theme: theme,
                           color: Colors.white,
                           isSelcted: isSelcted.value[index] ?? false,
@@ -46,6 +57,7 @@ class ChatScreen extends HookWidget {
                           time: chat.messages[index].datetime.getTime(),
                           onLongPress: () {
                             isSelcted.value = {index: true};
+                            messageId.value = chat.messages[index].id;
                           },
                           onTap: () {
                             if (isSelcted.value.isNotEmpty) {
@@ -56,13 +68,21 @@ class ChatScreen extends HookWidget {
                       }
                       return ChatBubble(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         theme: theme,
                         color: Colors.green[500]!,
                         isSelcted: isSelcted.value[index] ?? false,
                         message: chat.messages[index].body,
                         time: chat.messages[index].datetime.getTime(),
-                        onLongPress: () {},
-                        onTap: () {},
+                        onLongPress: () {
+                          isSelcted.value = {index: true};
+                          messageId.value = chat.messages[index].id;
+                        },
+                        onTap: () {
+                          if (isSelcted.value.isNotEmpty) {
+                            isSelcted.value = {};
+                          }
+                        },
                       );
                     },
                   );
@@ -102,9 +122,10 @@ class ChatScreen extends HookWidget {
                         const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
                     child: IconButton(
                       onPressed: () {
-                        Get.find<ChatViewModel>().sendMessage(
-                          reciever: userEmail,
+                        Get.find<ChatViewModel>().socketConnection(
+                          mode: ChatEnum.message,
                           body: controller.text,
+                          reciever: userEmail,
                         );
                         controller.clear();
                       },
@@ -127,13 +148,24 @@ class ChatScreen extends HookWidget {
 }
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({super.key});
+  final VoidCallback onPresses;
+  const CustomAppBar({
+    super.key,
+    required this.onPresses,
+  });
 
   @override
   Size get preferredSize => const Size.fromHeight(60);
 
   @override
   Widget build(BuildContext context) {
-    return AppBar();
+    return AppBar(
+      actions: [
+        IconButton(
+          onPressed: onPresses,
+          icon: const Icon(Icons.delete_outline),
+        )
+      ],
+    );
   }
 }

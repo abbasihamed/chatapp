@@ -9,6 +9,7 @@ class ChatBubble extends StatelessWidget {
   final VoidCallback onLongPress;
   final VoidCallback onTap;
   final CrossAxisAlignment crossAxisAlignment;
+  final MainAxisAlignment mainAxisAlignment;
   const ChatBubble({
     Key? key,
     required this.theme,
@@ -17,6 +18,7 @@ class ChatBubble extends StatelessWidget {
     required this.color,
     required this.isSelcted,
     required this.crossAxisAlignment,
+    required this.mainAxisAlignment,
     required this.onLongPress,
     required this.onTap,
   }) : super(key: key);
@@ -31,7 +33,7 @@ class ChatBubble extends StatelessWidget {
         child: Stack(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: mainAxisAlignment,
               children: [
                 Column(
                   crossAxisAlignment: crossAxisAlignment,

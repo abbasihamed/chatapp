@@ -38,19 +38,19 @@ class ChatsModel {
 }
 
 class Message {
-  final String? id;
+  final String id;
   final String sender;
   final String receiver;
   final String body;
-  final List? viewers;
+  final List viewers;
   final DateTime datetime;
 
   Message({
-     this.id,
+    required this.id,
     required this.sender,
     required this.receiver,
     required this.body,
-     this.viewers,
+    required this.viewers,
     required this.datetime,
   });
 

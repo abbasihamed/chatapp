@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:my_chat_app/core/enums.dart';
 import 'package:my_chat_app/core/servece_status.dart';
 import 'package:my_chat_app/data/chat_serveces.dart';
 import 'package:my_chat_app/injection.dart';
@@ -31,16 +32,58 @@ class ChatViewModel extends GetxController {
     channel!.stream.listen((event) {
       var temp = jsonDecode(event);
       if (temp.runtimeType != List) {
-        _messages.add(Message.fromJson(temp));
-      } else {
+        if (temp['request_mode'] == ChatEnum.delete.name) {
+          deleteMessage(temp['body']);
+        }
+        if (temp['request_mode'] == ChatEnum.message.name) {
+          _messages.add(Message.fromJson(temp));
+        }
+      }
+      if (temp.runtimeType == List) {
         _rooms.value = roomsModelFromJson(event);
       }
     });
   }
 
-  sendMessage({required String reciever, required String body}) async {
+  socketConnection(
+      {required Enum mode, required String body, String? reciever}) {
+    if (mode == ChatEnum.message) {
+      sendMessage(
+        reciever: reciever!,
+        body: body,
+        mode: ChatEnum.message,
+      );
+      return;
+    }
+    if (mode == ChatEnum.delete) {
+      sendDelete(
+        messageId: body,
+        mode: ChatEnum.delete,
+      );
+      return;
+    }
+  }
+
+  sendDelete({
+    required String messageId,
+    required Enum mode,
+  }) async {
     final sender = await shared.getData(key: 'email');
     channel!.sink.add(jsonEncode({
+      "request_mode": mode.name,
+      "sender": sender,
+      "body": messageId,
+    }));
+  }
+
+  sendMessage({
+    required String reciever,
+    required String body,
+    required Enum mode,
+  }) async {
+    final sender = await shared.getData(key: 'email');
+    channel!.sink.add(jsonEncode({
+      "request_mode": mode.name,
       "sender": sender,
       "receiver": reciever,
       "body": body.trim(),
@@ -49,7 +92,19 @@ class ChatViewModel extends GetxController {
   }
 
   setOldMessageList(ChatsModel value) {
-    _messages.value = value.messages;
+    for (var element in value.messages) {
+      if (element.viewers.contains(_email)) {
+        _messages.add(element);
+      }
+    }
+  }
+
+  deleteMessage(String value) {
+    for (int i = 0; i < _messages.length; i++) {
+      if (_messages[i].id == value) {
+        _messages.removeAt(i);
+      }
+    }
   }
 
   setRoomName(ChatsModel value) {
@@ -61,6 +116,7 @@ class ChatViewModel extends GetxController {
     var response =
         await chatSocket.getOldMessages(sender: _email, receiver: receiver);
     if (response is Success) {
+      _messages.clear();
       setOldMessageList(response.response as ChatsModel);
       setRoomName(response.response as ChatsModel);
     }
