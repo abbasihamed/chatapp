@@ -6,6 +6,7 @@ import 'package:my_chat_app/helper/date_time.dart';
 import 'package:my_chat_app/view_model/chat_view_model.dart';
 import 'package:my_chat_app/views/home/widgets/rooms_list_item.dart';
 import 'package:my_chat_app/views/search/search_screen.dart';
+import 'package:my_chat_app/views/widgets/app_loading.dart';
 
 class RoomsScreen extends HookWidget {
   final ThemeData theme;
@@ -31,17 +32,24 @@ class RoomsScreen extends HookWidget {
       body: GetX<ChatViewModel>(
         builder: (chat) {
           return ListView.separated(
-            itemCount: chat.rooms.length,
-            itemBuilder: (context, index) => InkWell(
-              onTap: () {
-                onTap(chat.rooms[index].roomName.replaceAll(chat.email, ''));
-              },
-              child: RoomsListItem(
-                roomName: chat.rooms[index].roomName.replaceAll(chat.email, ''),
-                lastMessage: chat.rooms[index].messages.body,
-                time: chat.rooms[index].messages.datetime.getTime(),
-              ),
-            ),
+            itemCount: chat.rooms.isNotEmpty ? chat.rooms.length : 1,
+            itemBuilder: (context, index) {
+              if (chat.isLoading) {
+                return const AppLoading();
+              }
+              return InkWell(
+                hoverColor: Colors.transparent,
+                onTap: () {
+                  onTap(chat.rooms[index].roomName.replaceAll(chat.email, ''));
+                },
+                child: RoomsListItem(
+                  roomName:
+                      chat.rooms[index].roomName.replaceAll(chat.email, ''),
+                  lastMessage: chat.rooms[index].messages.body,
+                  time: chat.rooms[index].messages.datetime.getTime(),
+                ),
+              );
+            },
             separatorBuilder: (context, index) => const Divider(
               indent: 80,
             ),

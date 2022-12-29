@@ -8,14 +8,14 @@ import '../../helper/validation.dart';
 import 'widgets/auth_text_field.dart';
 
 class CodeVerifyScreen extends HookWidget {
-  const CodeVerifyScreen({super.key});
+  final String email;
+  const CodeVerifyScreen({super.key, required this.email});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final controller = useTextEditingController();
     final formKey = useState(GlobalKey<FormState>());
-    final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -26,7 +26,7 @@ class CodeVerifyScreen extends HookWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Your email address',
+                email,
                 style: theme.textTheme.bodyText1,
               ),
               const SizedBox(height: 8),
@@ -42,7 +42,7 @@ Please enter it.
               Form(
                 key: formKey.value,
                 child: SizedBox(
-                  width: size.width * 0.7,
+                  width: 400,
                   child: AuthTextField(
                     controller: controller,
                     theme: theme,
@@ -59,8 +59,21 @@ Please enter it.
               GetBuilder<TimerController>(
                 init: TimerController(),
                 builder: (timer) {
+                  if (timer.isTimerEnd) {
+                    return TextButton(
+                      onPressed: () {
+                        Get.find<AuthViewModel>().sendEmail(email);
+                        timer.startTimer();
+                      },
+                      child: Text(
+                        'Send again',
+                        style: theme.textTheme.caption!
+                            .copyWith(color: theme.primaryColor),
+                      ),
+                    );
+                  }
                   return Text(
-                    '${timer.minutes.toString().padLeft(2, "0")} : ${timer.seconds.toString().padLeft(2, "0")}',
+                    '${timer.minutes} : ${timer.seconds}',
                     style: theme.textTheme.caption,
                   );
                 },

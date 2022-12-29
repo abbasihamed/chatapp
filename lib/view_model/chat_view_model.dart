@@ -18,16 +18,23 @@ class ChatViewModel extends GetxController {
   final RxList<RoomsModel> _rooms = <RoomsModel>[].obs;
 
   String? _roomName;
-
   String _email = '';
+  bool _isLoading = false;
 
   List<Message> get messages => _messages.reversed.toList();
   List<RoomsModel> get rooms => _rooms;
   String get email => _email;
+  bool get isLoading => _isLoading;
 
   WebSocketChannel? channel;
 
+  setLoading(bool value) {
+    _isLoading = value;
+    update();
+  }
+
   chatStreamConnection(String email) {
+    setLoading(true);
     channel = chatSocket.chatSocketConnection(email: email);
     channel!.stream.listen((event) {
       var temp = jsonDecode(event);
@@ -41,6 +48,7 @@ class ChatViewModel extends GetxController {
       }
       if (temp.runtimeType == List) {
         _rooms.value = roomsModelFromJson(event);
+        setLoading(false);
       }
     });
   }
@@ -112,6 +120,7 @@ class ChatViewModel extends GetxController {
   }
 
   getOldMessage(String receiver) async {
+    setLoading(true);
     _email = await shared.getData(key: 'email');
     var response =
         await chatSocket.getOldMessages(sender: _email, receiver: receiver);
@@ -124,6 +133,7 @@ class ChatViewModel extends GetxController {
       _messages.clear();
       _roomName = null;
     }
+    setLoading(false);
   }
 
   initialData() async {

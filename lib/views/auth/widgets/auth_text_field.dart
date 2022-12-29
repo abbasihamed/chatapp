@@ -6,6 +6,7 @@ class AuthTextField extends StatelessWidget {
   final ValueChanged<String>? onSubmitted;
   final FormFieldValidator? validator;
   final String labelText;
+  final String? hintText;
   final int? maxLength;
   final TextAlign? textAlign;
   final TextInputType? keyboardType;
@@ -15,6 +16,7 @@ class AuthTextField extends StatelessWidget {
     required this.controller,
     required this.theme,
     required this.labelText,
+    this.hintText,
     this.maxLength,
     this.onSubmitted,
     this.validator,
@@ -34,11 +36,8 @@ class AuthTextField extends StatelessWidget {
       textAlign: textAlign!,
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
-        label: Text(
-          labelText,
-          style: theme.textTheme.caption!
-              .copyWith(fontSize: 12, color: theme.primaryColor),
-        ),
+        hintText: hintText,
+        labelText: labelText,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(

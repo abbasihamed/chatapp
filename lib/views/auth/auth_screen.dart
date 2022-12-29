@@ -17,49 +17,59 @@ class AuthScreen extends HookWidget {
     Get.lazyPut(() => AuthViewModel());
     final controller = useTextEditingController();
     final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
     final formKey = useState(GlobalKey<FormState>());
     return SafeArea(
       child: Scaffold(
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Your email address',
-                style: theme.textTheme.bodyText1,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                """
-Please confirm your email address,
-Your email is username
-""",
-                style: theme.textTheme.caption,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              SizedBox(
-                width: size.width * 0.7,
-                child: Form(
-                  key: formKey.value,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: AuthTextField(
-                    controller: controller,
-                    theme: theme,
-                    labelText: 'Email Address',
-                    keyboardType: TextInputType.emailAddress,
-                    onSubmitted: (_) => navKey.currentState!.push(
-                      MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
-                      ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Your email address',
+                  style: theme.textTheme.bodyText1,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  """
+          Please confirm your email address,
+          Your email is username
+          """,
+                  style: theme.textTheme.caption,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: 400,
+                  child: Form(
+                    key: formKey.value,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: AuthTextField(
+                      controller: controller,
+                      theme: theme,
+                      labelText: 'Email Address',
+                      hintText: 'example@gmail.com',
+                      keyboardType: TextInputType.emailAddress,
+                      onSubmitted: (_) {
+                        if (formKey.value.currentState!.validate()) {
+                          Get.find<AuthViewModel>().sendEmail(controller.text);
+                          navKey.currentState!.push(
+                            MaterialPageRoute(
+                              builder: (context) => CodeVerifyScreen(
+                                email: controller.text,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      validator: (_) => InputValidation.inputValidation
+                          .emailValidation(controller.text),
                     ),
-                    validator: (_) => InputValidation.inputValidation
-                        .emailValidation(controller.text),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 8),
+              ],
+            ),
           ),
         ),
         floatingActionButton: FloatingActionButton(
@@ -70,7 +80,9 @@ Your email is username
               Get.find<AuthViewModel>().sendEmail(controller.text);
               navKey.currentState!.push(
                 MaterialPageRoute(
-                  builder: (context) => const CodeVerifyScreen(),
+                  builder: (context) => CodeVerifyScreen(
+                    email: controller.text,
+                  ),
                 ),
               );
             }

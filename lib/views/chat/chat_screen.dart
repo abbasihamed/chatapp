@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:my_chat_app/core/enums.dart';
 import 'package:my_chat_app/helper/date_time.dart';
 import 'package:my_chat_app/view_model/chat_view_model.dart';
+import 'package:my_chat_app/views/widgets/app_loading.dart';
 
 import 'widgets/chat_bubble.dart';
 
@@ -15,6 +16,7 @@ class ChatScreen extends HookWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final controller = useTextEditingController();
+    final chat = useState(Get.find<ChatViewModel>());
     final messageId = useState('');
     ValueNotifier<Map> isSelcted = useState({});
     return SafeArea(
@@ -38,6 +40,10 @@ class ChatScreen extends HookWidget {
               ),
         body: Column(
           children: [
+            if (chat.value.isLoading) const Padding(
+              padding:  EdgeInsets.only(top: 12),
+              child:  AppLoading(),
+            ),
             Expanded(
               child: GetX<ChatViewModel>(
                 builder: (chat) {
@@ -122,7 +128,7 @@ class ChatScreen extends HookWidget {
                         const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
                     child: IconButton(
                       onPressed: () {
-                        Get.find<ChatViewModel>().socketConnection(
+                        chat.value.socketConnection(
                           mode: ChatEnum.message,
                           body: controller.text,
                           reciever: userEmail,

@@ -43,6 +43,7 @@ dependencies:
   http: ^0.13.5
   get_it: ^7.2.0
   web_socket_channel: ^2.2.0
+  flutter_native_splash: ^2.2.16
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +55,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+
+flutter_native_splash:
+  color: "#1d65a0"
+  web: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
