@@ -40,18 +40,21 @@ class ChatScreen extends HookWidget {
               ),
         body: Column(
           children: [
-            if (chat.value.isLoading) const Padding(
-              padding:  EdgeInsets.only(top: 12),
-              child:  AppLoading(),
-            ),
             Expanded(
               child: GetX<ChatViewModel>(
                 builder: (chat) {
                   return ListView.builder(
                     reverse: true,
                     shrinkWrap: true,
-                    itemCount: chat.messages.length,
+                    itemCount:
+                        chat.messages.isNotEmpty ? chat.messages.length : 1,
                     itemBuilder: (context, index) {
+                      if (chat.isLoading) {
+                        return const Padding(
+                          padding: EdgeInsets.only(top: 12),
+                          child: AppLoading(),
+                        );
+                      }
                       if (chat.messages[index].receiver == userEmail) {
                         return ChatBubble(
                           crossAxisAlignment: CrossAxisAlignment.end,

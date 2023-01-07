@@ -39,31 +39,34 @@ class AuthScreen extends HookWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
-                SizedBox(
-                  width: 400,
-                  child: Form(
-                    key: formKey.value,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: AuthTextField(
-                      controller: controller,
-                      theme: theme,
-                      labelText: 'Email Address',
-                      hintText: 'example@gmail.com',
-                      keyboardType: TextInputType.emailAddress,
-                      onSubmitted: (_) {
-                        if (formKey.value.currentState!.validate()) {
-                          Get.find<AuthViewModel>().sendEmail(controller.text);
-                          navKey.currentState!.push(
-                            MaterialPageRoute(
-                              builder: (context) => CodeVerifyScreen(
-                                email: controller.text,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: SizedBox(
+                    width: 350,
+                    child: Form(
+                      key: formKey.value,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      child: AuthTextField(
+                        controller: controller,
+                        theme: theme,
+                        labelText: 'Email Address',
+                        hintText: 'example@gmail.com',
+                        keyboardType: TextInputType.emailAddress,
+                        onSubmitted: (_) {
+                          if (formKey.value.currentState!.validate()) {
+                            Get.find<AuthViewModel>().sendEmail(controller.text);
+                            navKey.currentState!.push(
+                              MaterialPageRoute(
+                                builder: (context) => CodeVerifyScreen(
+                                  email: controller.text,
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                      },
-                      validator: (_) => InputValidation.inputValidation
-                          .emailValidation(controller.text),
+                            );
+                          }
+                        },
+                        validator: (_) => InputValidation.inputValidation
+                            .emailValidation(controller.text),
+                      ),
                     ),
                   ),
                 ),
