@@ -9,12 +9,12 @@ import 'package:my_chat_app/views/search/search_screen.dart';
 import 'package:my_chat_app/views/widgets/app_loading.dart';
 
 class RoomsScreen extends HookWidget {
-  final ThemeData theme;
+  // final ThemeData theme;
   final Function(String) onTap;
 
   const RoomsScreen({
     super.key,
-    required this.theme,
+    // required this.theme,
     required this.onTap,
   });
 
@@ -22,10 +22,8 @@ class RoomsScreen extends HookWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: theme.primaryColor,
-        title: Text(
+        title: const Text(
           'MyChat',
-          style: theme.textTheme.bodyText1!.copyWith(color: Colors.white),
         ),
       ),
       drawer: const Drawer(),
@@ -57,7 +55,6 @@ class RoomsScreen extends HookWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: theme.primaryColor,
         child: const Icon(Icons.search),
         onPressed: () {
           navKey.currentState!.push(

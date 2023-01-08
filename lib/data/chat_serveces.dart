@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 class ChatServece {
   chatSocketConnection({required String email}) {
     var channel = WebSocketChannel.connect(
-      Uri.parse('ws://127.0.0.1:8000/email=$email'),
+      Uri.parse('ws://10.0.2.2:8000/email=$email'),
     );
     return channel;
   }

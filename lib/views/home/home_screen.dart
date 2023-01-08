@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     Get.put(ChatViewModel());
     final pageController = usePageController(viewportFraction: 1);
-    final theme = Theme.of(context);
+    // final theme = Theme.of(context);
     return WillPopScope(
       onWillPop: () async {
         if (pageController.page == 0.0) {
@@ -40,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           children: [
             RoomsScreen(
-              theme: theme,
               onTap: (value) {
                 scrollPhysics = const AlwaysScrollableScrollPhysics();
                 pageController.animateToPage(1,

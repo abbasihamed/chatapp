@@ -14,7 +14,7 @@ class ChatScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    // final theme = Theme.of(context);
     final controller = useTextEditingController();
     final chat = useState(Get.find<ChatViewModel>());
     final messageId = useState('');
@@ -34,8 +34,8 @@ class ChatScreen extends HookWidget {
             : AppBar(
                 title: Text(
                   userEmail,
-                  style:
-                      theme.textTheme.bodyText1!.copyWith(color: Colors.white),
+                  // style:
+                  //     theme.textTheme.bodyText1!.copyWith(color: Colors.white),
                 ),
               ),
         body: Column(
@@ -57,10 +57,8 @@ class ChatScreen extends HookWidget {
                       }
                       if (chat.messages[index].receiver == userEmail) {
                         return ChatBubble(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          theme: theme,
-                          color: Colors.white,
+                          alignment: Alignment.centerRight,
+                          color: const Color(0xFF3B76F6),
                           isSelcted: isSelcted.value[index] ?? false,
                           message: chat.messages[index].body,
                           time: chat.messages[index].datetime.getTime(),
@@ -76,10 +74,8 @@ class ChatScreen extends HookWidget {
                         );
                       }
                       return ChatBubble(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        theme: theme,
-                        color: Colors.green[500]!,
+                        alignment: Alignment.centerLeft,
+                        color: Theme.of(context).cardColor,
                         isSelcted: isSelcted.value[index] ?? false,
                         message: chat.messages[index].body,
                         time: chat.messages[index].datetime.getTime(),
@@ -98,16 +94,9 @@ class ChatScreen extends HookWidget {
                 },
               ),
             ),
+            Divider(color: Theme.of(context).dividerColor),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                BoxShadow(
-                  color: Colors.grey[300]!,
-                  blurRadius: 15,
-                  spreadRadius: 2,
-                  offset: const Offset(0, 1),
-                )
-              ]),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -115,13 +104,12 @@ class ChatScreen extends HookWidget {
                     child: TextFormField(
                       minLines: 1,
                       maxLines: 5,
-                      style: theme.textTheme.bodyText1,
+                      style: const TextStyle(fontSize: 14),
                       controller: controller,
                       keyboardType: TextInputType.multiline,
                       textInputAction: TextInputAction.newline,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Message',
-                        hintStyle: theme.textTheme.caption,
                         border: InputBorder.none,
                       ),
                     ),
@@ -142,7 +130,7 @@ class ChatScreen extends HookWidget {
                       icon: Icon(
                         Icons.send,
                         size: 24,
-                        color: theme.primaryColor,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                   ),

@@ -13,20 +13,26 @@ class RoomsListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).textTheme;
     return ListTile(
       leading: const CircleAvatar(),
       title: Text(
         roomName,
-        style: theme.bodyText1,
+        style: const TextStyle(
+          letterSpacing: 0.2,
+          wordSpacing: 1.5,
+          fontWeight: FontWeight.w900,
+        ),
       ),
       subtitle: Text(
         lastMessage,
-        style: theme.subtitle1,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(
+          color: Color(0xFF9899A5),
+          fontSize: 12,
+        ),
       ),
       trailing: Text(
         time,
-        style: theme.subtitle1,
       ),
     );
   }
