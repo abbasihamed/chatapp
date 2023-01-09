@@ -23,19 +23,16 @@ class AuthScreen extends HookWidget {
         body: Center(
           child: SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Your email address',
-                  style: theme.textTheme.bodyText1,
+                  style: TextStyle(fontSize: 26),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  """
-          Please confirm your email address,
-          Your email is username
-          """,
-                  style: theme.textTheme.caption,
+                const Text(
+                  """Please confirm your email address,\nYour email is username""",
+                  style: TextStyle(fontSize: 12),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
@@ -48,13 +45,13 @@ class AuthScreen extends HookWidget {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       child: AuthTextField(
                         controller: controller,
-                        theme: theme,
                         labelText: 'Email Address',
                         hintText: 'example@gmail.com',
                         keyboardType: TextInputType.emailAddress,
                         onSubmitted: (_) {
                           if (formKey.value.currentState!.validate()) {
-                            Get.find<AuthViewModel>().sendEmail(controller.text);
+                            Get.find<AuthViewModel>()
+                                .sendEmail(controller.text);
                             navKey.currentState!.push(
                               MaterialPageRoute(
                                 builder: (context) => CodeVerifyScreen(
@@ -76,7 +73,6 @@ class AuthScreen extends HookWidget {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: theme.primaryColor,
           child: const Icon(Icons.arrow_forward),
           onPressed: () {
             if (formKey.value.currentState!.validate()) {

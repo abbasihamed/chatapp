@@ -10,21 +10,15 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     Get.lazyPut(() => SearchUsersViewModel());
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.black),
           title: TextFormField(
-            cursorColor: Colors.grey,
-            decoration: InputDecoration(
-              hintStyle: theme.textTheme.caption!.copyWith(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
+            // cursorColor: Colors.grey,
+            decoration: const InputDecoration(
               hintText: 'Search',
               border: InputBorder.none,
             ),

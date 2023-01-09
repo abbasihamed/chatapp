@@ -27,25 +27,24 @@ class CodeVerifyScreen extends HookWidget {
             children: [
               Text(
                 email,
-                style: theme.textTheme.bodyText1,
+                style: const TextStyle(fontSize: 26),
               ),
               const SizedBox(height: 8),
-              Text(
+              const Text(
                 """
 We have sent the verification code to your email
 Please enter it.
 """,
-                style: theme.textTheme.caption,
+                style: TextStyle(fontSize: 12),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Form(
                 key: formKey.value,
                 child: SizedBox(
-                  width: 400,
+                  width: 350,
                   child: AuthTextField(
                     controller: controller,
-                    theme: theme,
                     labelText: 'Code',
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.number,
@@ -65,16 +64,15 @@ Please enter it.
                         Get.find<AuthViewModel>().sendEmail(email);
                         timer.startTimer();
                       },
-                      child: Text(
+                      child: const Text(
                         'Send again',
-                        style: theme.textTheme.caption!
-                            .copyWith(color: theme.primaryColor),
+                        style: TextStyle(fontSize: 18),
                       ),
                     );
                   }
                   return Text(
                     '${timer.minutes} : ${timer.seconds}',
-                    style: theme.textTheme.caption,
+                    style: const TextStyle(fontSize: 12),
                   );
                 },
               )
@@ -82,7 +80,6 @@ Please enter it.
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: theme.primaryColor,
           child: const Icon(Icons.arrow_forward),
           onPressed: () {
             if (formKey.value.currentState!.validate()) {

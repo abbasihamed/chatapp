@@ -1,3 +1,4 @@
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:my_chat_app/core/start_screen.dart';
@@ -24,14 +25,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'MyChat',
-      navigatorKey: navKey,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.dark,
-      home: startScreen,
+    return ThemeProvider(
+      initTheme: AppTheme.lightTheme,
+      builder: (context,theme) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'MyChat',
+          navigatorKey: navKey,
+          theme: theme,
+          home: startScreen,
+        );
+      }
     );
   }
 }

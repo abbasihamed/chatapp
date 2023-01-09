@@ -3,15 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  static final TextStyle basicStyle = GoogleFonts.roboto(
-    color: Colors.black,
-    fontSize: 20,
-    fontWeight: FontWeight.w400,
-  );
   static ThemeData get lightTheme {
     return ThemeData(
       brightness: Brightness.light,
       visualDensity: VisualDensity.adaptivePlatformDensity,
+      primaryColor: const Color(0xFF3B76F6),
       colorScheme: const ColorScheme.light(secondary: Color(0xFFD6755B)),
       textTheme: GoogleFonts.mulishTextTheme()
           .apply(bodyColor: const Color(0xFF53585A)),
@@ -44,6 +40,7 @@ class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
       brightness: Brightness.dark,
+      primaryColor: const Color(0xFF3B76F6),
       colorScheme: const ColorScheme.dark(secondary: Color(0xFFD6755B)),
       visualDensity: VisualDensity.adaptivePlatformDensity,
       textTheme: GoogleFonts.mulishTextTheme()
